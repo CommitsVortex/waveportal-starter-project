@@ -8,7 +8,7 @@ const App = () => {
   const [currentAccount, setCurrentAccount] = useState("");
   const [allWaves, setAllWaves] = useState([]);
   const [message, setMessage] = useState("");
-  const contractAddress = "0x6EA8E79e17bDFB4acED783ae08098c6cC4c946da";
+  const contractAddress = "0x04FEd9Ddb831999693C940D9c614a8D6De2eB813";
   
   // Method that will get all waves from contract
   const getAllWaves = async () => {
