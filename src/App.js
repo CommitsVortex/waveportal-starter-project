@@ -12,8 +12,9 @@ const App = () => {
   
   // Method that will get all waves from contract
   const getAllWaves = async () => {
+    const { ethereum } = window;
+
     try {
-      const { ethereum } = window;
       if (ethereum) {
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
@@ -23,13 +24,12 @@ const App = () => {
         const waves = await wavePortalContract.getAllWaves();
 
         // select address, timestamp, and message for UI
-        let wavesCleaned = [];
-        waves.forEach(wave => {
-          wavesCleaned.push({
+        const wavesCleaned = waves.map(wave => {
+          return {
             address: wave.waver,
             timestamp: new Date(wave.timestamp * 1000),
-            message: wave.message
-          });
+            message: wave.message,
+          }
         });
 
         // store data in React State
@@ -40,7 +40,36 @@ const App = () => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
+
+  useEffect(() => {
+    let wavePortalContract;
+
+    const onNewWave = (from, timestamp, message) => {
+      console.log("NewState", from, timestamp, message);
+      setAllWaves(prevState => [
+        ...prevState,
+        {
+          address: from,
+          timestamp: new Date(timestamp * 1000),
+          message: message,
+        },
+      ]);
+    };
+    if (window.ethereum) {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+
+      wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+      wavePortalContract.on("NewWave", onNewWave);
+    }
+
+    return () => {
+      if (wavePortalContract) {
+        wavePortalContract.off("NewWave", onNewWave);
+      }
+    };
+  }, []);
   
   // clicking the wave button that triggeres contractABI
   // will cause the web client to be reading data from the contract
