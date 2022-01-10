@@ -26,9 +26,30 @@
 
 .waveButton {
   cursor: pointer;
-  margin-top: 16px;
+  margin-top: 6px;
   padding: 8px;
   border: 0;
   border-radius: 5px;
   
+}
+
+.waveEntry {
+  margin-top: 4px;
+  padding: 4px;
+}
+
+.waveLogs {
+  max-width: 400px;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+.logs {
+  background-color: OldLace; 
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 15px;
+  border-radius: 5px;
+  margin-top: 10px;
 }
